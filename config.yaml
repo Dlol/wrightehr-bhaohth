@@ -1,0 +1,73 @@
+# sheets config
+sheetsId: 1hkynZs2fyTYpTCzA4fISg2vT7pwTpui7H4DDGwzFmzM
+sheets:
+  categories: 1210882748
+  world: 0
+  character: 1931742902
+  prompts: 1378486483
+
+# file config
+files:
+  categories: categories.csv
+  character: character.csv
+  world: world.csv
+  prompt: prompts.csv
+  plot: plot.csv
+
+help:
+  -
+    name: categories
+    alts: [cats]
+    usage: categories [filter]
+    desc: Displays available categories, and allows you to filter by command
+  -
+    name: update
+    alts: [download]
+    usage: update
+    desc: Updates questions to reflect the Google Sheet
+  -
+    name: wbc
+    alts: []
+    usage: wbc <filter>
+    desc: Gives you a worldbuilding question
+  -
+    name: cbc
+    alts: []
+    usage: cbc <filter>
+    desc: Gives you a character question
+  -
+    name: prompt
+    alts: []
+    usage: prompt <filter>
+    desc: Gives you a writing prompt
+  -
+    name: pbc
+    alts: [sbc]
+    usage: cbc <filter>
+    desc: Gives you plot/structure-related questions
+  -
+    name: credits
+    alts: []
+    usage: credits
+    desc: Credits for the bot
+
+credits:
+  Coding: 
+    - snailmusic
+  Questions: 
+    - solariscrescent
+    - snailmusic
+    - killrbagel
+  Organization:
+    - solariscrescent
+    - snailmusic
+  Prompts:
+    - killrbagel
+    - solariscrescent
+    - https://writing-prompt-s.tumblr.com/
+    - https://blog.reedsy.com/creative-writing-prompts/
+
+reloadAllowed: 
+  - 260917329414586368
+  - 282909571054305282
+  - 728451464007254026
