@@ -22,7 +22,7 @@ client.once(Events.ClientReady, c => {
     log(`Ready, logged in as ${c.user.tag}`)
     // log("updating questions")
     // log(config)
-    backend.updateQuestions(config)
+    // backend.updateQuestions(config)
     questionData = backend.questionInit(config)
     // log(questionData.cats)
     // log("if ur cool then you will print this out")
@@ -136,9 +136,10 @@ client.addListener(Events.MessageCreate, async (message) => {
             // if (!config.reloadAllowed.includes(message.author.id)) { return; }
             await message.channel.send("starting...")
             config = backend.loadConfig("config.yaml")
-            backend.updateQuestions(config)
-            questionData = backend.questionInit(config)
-            await message.channel.send("done!")
+            backend.updateQuestions(config, async () => {
+                questionData = backend.questionInit(config)
+                await message.channel.send("done!")
+            })
             reloadMetric.inc()
             break;
         

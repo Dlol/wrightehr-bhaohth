@@ -6,7 +6,7 @@ function loadConfig(filename) {
     return yaml.load(fs.readFileSync(filename, "utf-8"))
 }
 
-function updateQuestions(config) {
+function updateQuestions(config, callback = () => {}) {
     const fetch = require("node-fetch")
     const fs = require("fs")
 
@@ -19,8 +19,13 @@ function updateQuestions(config) {
             .then(body => {
                 const file = fs.openSync(key+".csv", "w")
                 fs.writeFileSync(file, body)
+                fs.closeSync(file)
             })
     }
+    console.log("questions updated");
+    setTimeout(() => {
+        callback()
+    }, 1000);
 }
 
 function questionInit(config) {
@@ -92,6 +97,8 @@ function questionInit(config) {
             cats[currentType][category] = desc
         }
     }
+    console.log("questions init");
+    // console.log(cats);
     return {...loaded, cats}
 }
 
