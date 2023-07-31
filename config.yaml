@@ -47,6 +47,11 @@ help:
     usage: pbc <filter>
     desc: Gives you plot/structure-related questions
   -
+    name: random
+    alts: [roll]
+    usage: random <max>
+    desc: Gives you a random number between 1 and `max` inclusive (default 6)
+  -
     name: credits
     alts: []
     usage: credits
@@ -67,6 +72,7 @@ credits:
     - solariscrescent
     - https://writing-prompt-s.tumblr.com/
     - https://blog.reedsy.com/creative-writing-prompts/
+    - https://presidentbttrflyfreak.tumblr.com/post/174722599040/heartbreaksad-dialogue-prompts
 
 reloadAllowed: 
   - 260917329414586368

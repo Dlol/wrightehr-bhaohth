@@ -166,7 +166,20 @@ client.addListener(Events.MessageCreate, async (message) => {
             const plotSelected = backend.thingPicker(questionData.plot, params)
             await message.reply(pickDisplay(plotSelected))
             break;
-    
+        
+        case "random":
+        case "roll":
+            let amt = 6
+            if (params[0]) {
+                amt = Number(params[0])
+                if (Number.isNaN(amt)) {
+                    amt = 6
+                }
+            }
+            let rand = Math.floor((Math.random() * amt) + 1)
+            await message.reply(`Your result is: ${rand} (max: ${amt})`)
+            break;
+        
         default:
             break;
     }
