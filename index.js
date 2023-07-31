@@ -22,7 +22,7 @@ client.once(Events.ClientReady, c => {
     log(`Ready, logged in as ${c.user.tag}`)
     // log("updating questions")
     // log(config)
-    // backend.updateQuestions(config)
+    backend.updateQuestions(config)
     questionData = backend.questionInit(config)
     // log(questionData.cats)
     // log("if ur cool then you will print this out")
@@ -82,6 +82,10 @@ client.addListener(Events.MessageCreate, async (message) => {
                     case "prompts":
                         source = cats.prompt
                         break;
+                    
+                    case "plot":
+                        source = cats.plot
+                        break;
 
                     default:
                         break;
@@ -105,6 +109,10 @@ client.addListener(Events.MessageCreate, async (message) => {
             for (let key in cats.prompt) {
                 promptText += `- ${key}\n`
             }
+            let plotText = ""
+            for (let key in cats.plot) {
+                plotText += `- ${key}\n`
+            }
             // log(wbText)
             // log(charText)
             // log(promptText)
@@ -114,7 +122,8 @@ client.addListener(Events.MessageCreate, async (message) => {
                 .addFields(
                     {name: "Worldbuilding", value: wbText},
                     {name: "Character", value: charText},
-                    {name: "Prompts", value: promptText}
+                    {name: "Prompts", value: promptText},
+                    {name: "Plot", value: plotText}
                 )
                 .setFooter({ text: "Use >categories [type] to get more details!"})
                 .setTimestamp()
@@ -133,19 +142,28 @@ client.addListener(Events.MessageCreate, async (message) => {
             reloadMetric.inc()
             break;
         
+        case "worldbuilding":
         case "wbc":
-            const worldSelected = backend.thingPicker(questionData.worldQs, params)
+            const worldSelected = backend.thingPicker(questionData.world, params)
             await message.reply(pickDisplay(worldSelected))
             break;
         
+        case "character":
         case "cbc":
-            const charSelected = backend.thingPicker(questionData.charQs, params)
+            const charSelected = backend.thingPicker(questionData.character, params)
             await message.reply(pickDisplay(charSelected))
             break;
 
         case "prompt":
             const promptSelected = backend.thingPicker(questionData.prompts, params)
             await message.reply(pickDisplay(promptSelected))
+            break;
+        
+        case "pbc":
+        case "plot":
+        case "sbc":
+            const plotSelected = backend.thingPicker(questionData.plot, params)
+            await message.reply(pickDisplay(plotSelected))
             break;
     
         default:

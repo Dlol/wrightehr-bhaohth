@@ -28,12 +28,12 @@ help:
     desc: Updates questions to reflect the Google Sheet
   -
     name: wbc
-    alts: []
+    alts: [worldbuilding]
     usage: wbc <filter>
     desc: Gives you a worldbuilding question
   -
     name: cbc
-    alts: []
+    alts: [character]
     usage: cbc <filter>
     desc: Gives you a character question
   -
@@ -43,8 +43,8 @@ help:
     desc: Gives you a writing prompt
   -
     name: pbc
-    alts: [sbc]
-    usage: cbc <filter>
+    alts: [plot, sbc]
+    usage: pbc <filter>
     desc: Gives you plot/structure-related questions
   -
     name: credits

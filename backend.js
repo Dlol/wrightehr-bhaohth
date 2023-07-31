@@ -1,3 +1,4 @@
+const toLoad = ["character", "world", "prompt", "plot"]
 
 function loadConfig(filename) {
     const yaml = require('js-yaml')
@@ -25,59 +26,30 @@ function updateQuestions(config) {
 function questionInit(config) {
     const fs = require("fs")
     const {parse} = require('csv/sync');
-    let worldQs = []
-    let charQs = []
-    let prompts = []
     let cats = {}
-    const characterRecords = parse(fs.readFileSync(config.files.character, "utf-8"), {
-        from: 2,
-        relax_column_count: true
-    })
-    
-    // const toLoad = ["character", "world", "prompt", "plot"]
 
-    const worldRecords = parse(fs.readFileSync(config.files.world, "utf-8"), {
-        from: 2,
-        relax_column_count: true
-    })
+    let loaded = {}
 
-    const promptRecords = parse(fs.readFileSync(config.files.prompt, "utf-8"), {
-        from: 2,
-        relax_column_count: true
-    })
+    for (const item of toLoad) {
+        const records = parse(fs.readFileSync(config.files[item], "utf-8"), {
+            from: 2,
+            relax_column_count: true
+        })
+        let obj = []
+        for (const record of records) {
+            obj.push([])
+            for (const sub of record) {
+                if (sub == "") {continue}
+                obj.at(-1).push(sub)
+            }
+        }
+        loaded[item] = obj
+    }
     
     const categoryRecords = parse(fs.readFileSync(config.files.categories, "utf-8"), {
         from: 2,
         relax_column_count: true
     })
-    
-    // i know this may seem weird but trust me it'll make the advanced category search easier
-    // inefficient in short -> efficient in long
-    // ykyk
-    // <3 - 3:33 am draven
-    for (const item of characterRecords) {
-        charQs.push([])
-        for (const sub of item) {
-            if (sub == "") { continue }
-            charQs.at(-1).push(sub)
-        }
-    }
-
-    for (const item of worldRecords) {
-        worldQs.push([])
-        for (const sub of item) {
-            if (sub == "") { continue }
-            worldQs.at(-1).push(sub)
-        }
-    }
-
-    for (const item of promptRecords) {
-        prompts.push([])
-        for (const sub of item) {
-            if (sub == "") { continue }
-            prompts.at(-1).push(sub)
-        }
-    }
 
     let currentType = ""
     for (const item of categoryRecords) {
@@ -95,6 +67,10 @@ function questionInit(config) {
                 
                 case "Writing Prompts":
                     currentType = "prompt"
+                    break;
+
+                case "Plot Questions":
+                    currentType = "plot"
                     break;
             
                 default:
@@ -116,7 +92,7 @@ function questionInit(config) {
             cats[currentType][category] = desc
         }
     }
-    return {worldQs, charQs, prompts, cats}
+    return {...loaded, cats}
 }
 
 function arrayChoose(array) {
@@ -160,5 +136,6 @@ module.exports = {
     loadConfig,
     updateQuestions,
     questionInit,
-    thingPicker
+    thingPicker,
+    toLoad
 }
