@@ -25,7 +25,7 @@ help:
     name: update
     alts: [download]
     usage: update
-    desc: Updates questions to reflect the Google Sheet
+    desc: Updates questions to reflect the Google Sheet (developers only)
   -
     name: wbc
     alts: [worldbuilding]
@@ -75,6 +75,6 @@ credits:
     - https://presidentbttrflyfreak.tumblr.com/post/174722599040/heartbreaksad-dialogue-prompts
 
 reloadAllowed: 
-  - 260917329414586368
-  - 282909571054305282
-  - 728451464007254026
+  - "260917329414586368"
+  - "282909571054305282"
+  - "728451464007254026"

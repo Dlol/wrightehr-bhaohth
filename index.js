@@ -1,8 +1,10 @@
-const { log } = require("console")
-const { Client, GatewayIntentBits, Events, EmbedBuilder } = require("discord.js")
+const { log, error } = require("console")
+const { Client, GatewayIntentBits, Events, EmbedBuilder, Collection } = require("discord.js")
 const io = require("@pm2/io")
 
 const backend = require("./backend.js")
+const path = require("path")
+const fs = require("fs")
 
 require('dotenv').config()
 
@@ -18,6 +20,24 @@ const reloadMetric = io.counter({name: "Reloads", id: "app/util/reloads"})
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent]})
 
+// command importation
+client.commands = new Collection();
+
+const commandsPath = path.join(__dirname, "commands")
+const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'))
+
+for (const file of commandFiles) {
+    const filePath = path.join(commandsPath, file)
+    const command = require(filePath)
+
+    if ('data' in command && 'execute' in command) {
+        // log(command.data.name)
+        client.commands.set(command.data.name, command)
+    } else {
+        console.warn(`the command at ${filePath} is missing data/execute!`)
+    }
+}
+
 client.once(Events.ClientReady, c => {
     log(`Ready, logged in as ${c.user.tag}`)
     // log("updating questions")
@@ -27,6 +47,32 @@ client.once(Events.ClientReady, c => {
     // log(questionData.cats)
     // log("if ur cool then you will print this out")
     // log(worldQs)
+})
+
+client.on(Events.InteractionCreate, async interaction => {
+    if (!interaction.isChatInputCommand()) return;
+    // log(interaction)
+
+    const command = interaction.client.commands.get(interaction.commandName)
+
+    if (!command) {
+        error(`No command matching ${interaction.commandName} found`)
+        return;
+    }
+
+    try {
+        await command.execute(interaction, {
+            questionData,
+            config
+        })
+    } catch (error) {
+        console.error(error)
+        if (interaction.replied || interaction.deferred) {
+			await interaction.followUp({ content: 'There was an error while executing this command!', ephemeral: true });
+		} else {
+			await interaction.reply({ content: 'There was an error while executing this command!', ephemeral: true });
+		}
+    }
 })
 
 client.addListener(Events.MessageCreate, async (message) => {
@@ -133,7 +179,10 @@ client.addListener(Events.MessageCreate, async (message) => {
 
         case "download":
         case "update":
-            // if (!config.reloadAllowed.includes(message.author.id)) { return; }
+            if (!config.reloadAllowed.includes(message.author.id)) {
+                await message.channel.send("you dont have valid perms >:(");
+                return;
+            }
             await message.channel.send("starting...")
             config = backend.loadConfig("config.yaml")
             backend.updateQuestions(config, async () => {
