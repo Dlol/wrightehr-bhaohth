@@ -82,10 +82,27 @@ client.addListener(Events.MessageCreate, async (message) => {
     let content = message.content
     if (content.slice(0, 1) != ">") { return }
     content = content.slice(1)
-    const command = content.split(" ")[0]
+    let command = content.split(" ")[0]
     const params = content.split(" ")
     params.shift()
-    // log(content)
+    command = command.toLowerCase()
+
+    const questions = [
+        {type: "world", commands: ["wbc", "worldbuilding"]},
+        {type: "character", commands: ["cbc"]},
+        {type: "plot", commands: ["pbc", "sbc"]},
+        {type: "prompt", commands: []}
+    ]
+
+    for (const question of questions) {
+        if (command == question.type || question.commands.includes(command)) {
+            console.log(params);
+            const selected = backend.thingPicker(questionData[question.type], params)
+            await message.reply(pickDisplay(selected))
+            return
+        }
+    }
+
     switch (command) {
         case "help":
             let out = "## Available commands\n"
@@ -159,9 +176,6 @@ client.addListener(Events.MessageCreate, async (message) => {
             for (let key in cats.plot) {
                 plotText += `- ${key}\n`
             }
-            // log(wbText)
-            // log(charText)
-            // log(promptText)
             let embed = new EmbedBuilder()
                 .setTitle("Writer Bot Categories")
                 .setDescription("Current categories that can be filtered by")
@@ -190,30 +204,6 @@ client.addListener(Events.MessageCreate, async (message) => {
                 await message.channel.send("done!")
             })
             reloadMetric.inc()
-            break;
-        
-        case "worldbuilding":
-        case "wbc":
-            const worldSelected = backend.thingPicker(questionData.world, params)
-            await message.reply(pickDisplay(worldSelected))
-            break;
-        
-        case "character":
-        case "cbc":
-            const charSelected = backend.thingPicker(questionData.character, params)
-            await message.reply(pickDisplay(charSelected))
-            break;
-
-        case "prompt":
-            const promptSelected = backend.thingPicker(questionData.prompts, params)
-            await message.reply(pickDisplay(promptSelected))
-            break;
-        
-        case "pbc":
-        case "plot":
-        case "sbc":
-            const plotSelected = backend.thingPicker(questionData.plot, params)
-            await message.reply(pickDisplay(plotSelected))
             break;
         
         case "random":
