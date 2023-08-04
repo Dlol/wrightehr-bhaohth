@@ -40,9 +40,11 @@ for (const file of commandFiles) {
 
 client.once(Events.ClientReady, c => {
     log(`Ready, logged in as ${c.user.tag}`)
-    // log("updating questions")
+    if (!fs.existsSync("categories.csv")) {
+        log("updating questions")
+        backend.updateQuestions(config)
+    }
     // log(config)
-    // backend.updateQuestions(config)
     questionData = backend.questionInit(config)
     // log(questionData.cats)
     // log("if ur cool then you will print this out")
