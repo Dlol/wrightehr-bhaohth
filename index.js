@@ -1,5 +1,5 @@
 const { log, error } = require("console")
-const { Client, GatewayIntentBits, Events, EmbedBuilder, Collection } = require("discord.js")
+const { Client, GatewayIntentBits, Events, EmbedBuilder, Collection, ActivityType } = require("discord.js")
 const io = require("@pm2/io")
 
 const backend = require("./backend.js")
@@ -13,6 +13,12 @@ let config = backend.loadConfig("config.yaml")
 let questionData = {}
 const reloadMetric = io.counter({name: "Reloads", id: "app/util/reloads"})
 
+const questions = [
+    {type: "world", commands: ["wbc", "worldbuilding"]},
+    {type: "character", commands: ["cbc"]},
+    {type: "plot", commands: ["pbc", "sbc"]},
+    {type: "prompt", commands: ["prompts"]}
+]
 
 // function updateSheets() {
 //     let sheetId = process
@@ -40,6 +46,7 @@ for (const file of commandFiles) {
 
 client.once(Events.ClientReady, c => {
     log(`Ready, logged in as ${c.user.tag}`)
+    client.user.setActivity(">help or /help", {type: ActivityType.Playing})
     if (!fs.existsSync("categories.csv")) {
         log("updating questions")
         backend.updateQuestions(config)
@@ -89,16 +96,9 @@ client.addListener(Events.MessageCreate, async (message) => {
     params.shift()
     command = command.toLowerCase()
 
-    const questions = [
-        {type: "world", commands: ["wbc", "worldbuilding"]},
-        {type: "character", commands: ["cbc"]},
-        {type: "plot", commands: ["pbc", "sbc"]},
-        {type: "prompt", commands: []}
-    ]
-
     for (const question of questions) {
         if (command == question.type || question.commands.includes(command)) {
-            console.log(params);
+            // console.log(params);
             const selected = backend.thingPicker(questionData[question.type], params)
             await message.reply(pickDisplay(selected))
             return
@@ -112,6 +112,7 @@ client.addListener(Events.MessageCreate, async (message) => {
                 out += `- ${data.name} (${data.alts.join(", ")}): \`${data.usage}\`
     ${data.desc}\n`
             }
+            out += "\nYou can use multiple filters by separating with spaces!\nAnd you can exclude by prefixing the filter with `-`!\n";
             out += "*Lost? Try `>wbc starter`!*"
             await message.reply(out)
             break;
@@ -121,15 +122,20 @@ client.addListener(Events.MessageCreate, async (message) => {
             for (const type in config.credits) {
                 creditsFields.push({name: type, value: config.credits[type].join(", ")})
             }
-            log(creditsFields)
+            // log(creditsFields)
             let creditsEmbed = new EmbedBuilder()
                 .setTitle("Credits")
                 .setDescription("Who made the bot!")
                 .addFields(
                     creditsFields
                 )
+                .addFields(
+                    [{name: 'Links', value: `[Google Sheet](https://docs.google.com/spreadsheets/d/${config.sheetsId}/edit#gid=${config.sheets.categories})
+[Github Link](https://github.com/Dlol/wrightehr-bhaohth)
+[Obsidian Plugin](https://github.com/Dlol/writing-helper)
+[Invite Link!](https://discord.com/api/oauth2/authorize?client_id=914374342341697556&permissions=380708588608&scope=bot)`}]
+                )
                 .setTimestamp()
-                .setURL("https://docs.google.com/spreadsheets/d/" + config.sheetsId + "/edit#gid=" + config.sheets.categories)
             
             await message.reply({embeds: [creditsEmbed]})
             break;

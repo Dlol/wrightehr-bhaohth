@@ -38,7 +38,7 @@ help:
     desc: Gives you a character question
   -
     name: prompt
-    alts: []
+    alts: [prompts]
     usage: prompt <filter>
     desc: Gives you a writing prompt
   -
@@ -64,6 +64,7 @@ credits:
     - solariscrescent
     - snailmusic
     - killrbagel
+    - celestine.
   Organization:
     - solariscrescent
     - snailmusic
