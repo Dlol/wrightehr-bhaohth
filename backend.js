@@ -1,4 +1,4 @@
-const toLoad = ["character", "world", "prompt", "plot"]
+const toLoad = ["character", "world", "prompt", "plot", "ttrpg"]
 
 function loadConfig(filename) {
     const yaml = require('js-yaml')

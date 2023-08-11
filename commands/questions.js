@@ -13,7 +13,8 @@ module.exports = {
                     {name: "Worldbuilding", value: "world"},
                     {name: "Character", value:"character"},
                     {name: "Plot", value: "plot"},
-                    {name: "Prompts", value: "prompt"}
+                    {name: "Prompts", value: "prompt"},
+                    { name:"TTRPG", value: "ttrpg" }
                 ))
         .addStringOption(option =>
             option.setName("filter")

@@ -17,7 +17,8 @@ const questions = [
     {type: "world", commands: ["wbc", "worldbuilding"]},
     {type: "character", commands: ["cbc"]},
     {type: "plot", commands: ["pbc", "sbc"]},
-    {type: "prompt", commands: ["prompts"]}
+    {type: "prompt", commands: ["prompts"]},
+    {type: "ttrpg", commands: ["rpg"]}
 ]
 
 // function updateSheets() {
@@ -158,6 +159,10 @@ client.addListener(Events.MessageCreate, async (message) => {
                         source = cats.plot
                         break;
 
+                    case "ttrpg":
+                        source = cats.ttrpg
+                        break;
+
                     default:
                         break;
                 }
@@ -184,6 +189,10 @@ client.addListener(Events.MessageCreate, async (message) => {
             for (let key in cats.plot) {
                 plotText += `- ${key}\n`
             }
+            let ttrpgText = ""
+            for (let key in cats.ttrpg) {
+                ttrpgText += `- ${key}\n`
+            }
             let embed = new EmbedBuilder()
                 .setTitle("Writer Bot Categories")
                 .setDescription("Current categories that can be filtered by")
@@ -191,7 +200,8 @@ client.addListener(Events.MessageCreate, async (message) => {
                     {name: "Worldbuilding", value: wbText},
                     {name: "Character", value: charText},
                     {name: "Prompts", value: promptText},
-                    {name: "Plot", value: plotText}
+                    {name: "Plot", value: plotText},
+                    {name: "TTRPG", value: ttrpgText}
                 )
                 .setFooter({ text: "Use >categories [type] to get more details!"})
                 .setTimestamp()

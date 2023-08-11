@@ -6,6 +6,7 @@ sheets:
   character: 1931742902
   prompts: 1378486483
   plot: 578448559
+  ttrpg: 973338377
 
 # file config
 files:
@@ -14,6 +15,7 @@ files:
   world: world.csv
   prompt: prompts.csv
   plot: plot.csv
+  ttrpg: ttrpg.csv
 
 help:
   -
@@ -46,6 +48,11 @@ help:
     alts: [plot, sbc]
     usage: pbc <filter>
     desc: Gives you plot/structure-related questions
+  -
+    name: ttrpg
+    alts: [rpg]
+    usage: ttrpg <filter>
+    desc: Gives you questions for building a ttrpg!
   -
     name: roll
     alts: [random]

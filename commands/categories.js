@@ -12,7 +12,8 @@ module.exports = {
                     { name: 'Character', value: 'character' },
                     { name: 'Plot', value: 'plot' },
                     { name: 'Prompt', value: 'prompt' },
-                    { name: 'Worldbuilding', value: 'worldbuilding'}
+                    { name: 'Worldbuilding', value: 'worldbuilding'},
+                    { name:"TTRPG", value: "ttrpg" }
                 )
         ),
     async execute(interaction, context) {
@@ -32,6 +33,10 @@ module.exports = {
                 
                 case "plot":
                     source = cats.plot
+                    break;
+                
+                case "ttrpg":
+                    source = cats.ttrpg
                     break;
 
                 default:
@@ -60,6 +65,10 @@ module.exports = {
         for (let key in cats.plot) {
             plotText += `- ${key}\n`
         }
+        let ttrpgText = ""
+        for (let key in cats.ttrpg) {
+            ttrpgText += `- ${key}\n`
+        }
         // log(wbText)
         // log(charText)
         // log(promptText)
@@ -70,7 +79,8 @@ module.exports = {
                 {name: "Worldbuilding", value: wbText},
                 {name: "Character", value: charText},
                 {name: "Prompts", value: promptText},
-                {name: "Plot", value: plotText}
+                {name: "Plot", value: plotText},
+                {name: "TTRPG", value: ttrpgText}
             )
             .setFooter({ text: "Use >categories [type] to get more details!"})
             .setTimestamp()
