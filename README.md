@@ -16,6 +16,7 @@ DISCORD_TOKEN=<insert your bot token here>
 DISCORD_CLIENT=<insert your client id here>
 ```
 3. run `node deploy-commands.js`
-4. run `node .` or `pm2 index.js` if you want
-5. ????
-6. profit
+4. run `node genData.js`
+5. run `node .` or `pm2 index.js` if you want
+6. ????
+7. profit
